@@ -1,0 +1,49 @@
+{
+  "name": "advancedideasmechanics/mezzio-ga-measurement-protocol",
+  "description": "Mezzio Middleware for Google Analytics Measurement Protocol",
+  "type": "library",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "keywords": [
+    "matthewpallotta",
+    "advancedideasmechanics",
+    "mezzio",
+    "php",
+    "library",
+    "google",
+    "analytics"
+  ],
+  "authors": [
+    {
+      "name": "Matthew Pallotta",
+      "email": "matt@advanced.im",
+      "homepage": "https://advanced.im"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/advancedideasmechanics/mezzio-ga-measurement-protocol/issues",
+    "email": "support@advanced.im",
+    "source": "https://github.com/advancedideasmechanics/mezzio-ga-measurement-protocol"
+  },
+  "homepage": "https://advanced.im/product/mezzio-ga-measurement-protocol",
+  "require": {
+    "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
+    "psr/http-server-middleware": "^1.0",
+    "mezzio/mezzio-template": "^2.0 || ^3.0",
+    "mezzio/mezzio-router": "^3.0 || ^4.0",
+    "alexwestergaard/php-ga4": "^v2.1.2"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "AdvancedIdeasMechanics\\MezzioGaMeasurementProtocol\\": "src/"
+    }
+  },
+  "extra": {
+    "laminas": {
+      "config-provider": "AdvancedIdeasMechanics\\MezzioGaMeasurementProtocol\\ConfigProvider"
+    }
+  }
+}
