@@ -3,7 +3,7 @@ Mezzio Middleware for Google Analytics Measurement Protocol
 
 ### Composer ###
 
-`composer install advancedideasmechanics/mezzio-ga-measurement-protocol`
+`composer require advancedideasmechanics/mezzio-ga-measurement-protocol`
 
 #### Use ####
 
