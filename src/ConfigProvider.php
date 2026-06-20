@@ -1,5 +1,6 @@
 <?php
 namespace AdvancedIdeasMechanics\MezzioGaMeasurementProtocol;
+
 class ConfigProvider
 {
     public function __invoke(): array

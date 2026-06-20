@@ -11,19 +11,20 @@ use Psr\Http\Server\RequestHandlerInterface;
 use AlexWestergaard\PhpGa4\Analytics;
 use AlexWestergaard\PhpGa4\Event\PageView;
 
-class MezzioGaMeasurementProtocol implements MiddlewareInterface
+class GoogleAnalyticsMeasurementProtocolMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private string $measurementId,
         private string $apiSecret,
         private bool $debug = false,
+        private string $cookieName,
         private string $pageTitle
     ) {}
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         // Check for the tracking cookie before handling the response
         $cookies = $request->getCookieParams();
-        $cookieName = '_ga_uid';
+        $cookieName = $this->cookieName;
         $setCookie = false;
 
         if (isset($cookies[$cookieName])) {
