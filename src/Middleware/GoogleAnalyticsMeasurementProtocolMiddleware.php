@@ -10,6 +10,7 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use AlexWestergaard\PhpGa4\Analytics;
 use AlexWestergaard\PhpGa4\Event\PageView;
+use Laminas\Diactoros\Response;
 
 class GoogleAnalyticsMeasurementProtocolMiddleware implements MiddlewareInterface
 {

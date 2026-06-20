@@ -31,6 +31,7 @@
     "psr/http-server-middleware": "^1.0",
     "mezzio/mezzio-template": "^2.0 || ^3.0",
     "mezzio/mezzio-router": "^3.0 || ^4.0",
+    "laminas/laminas-diactoros": "3.8.0",
     "alexwestergaard/php-ga4": "^v2.1.2"
   },
   "require-dev": {
