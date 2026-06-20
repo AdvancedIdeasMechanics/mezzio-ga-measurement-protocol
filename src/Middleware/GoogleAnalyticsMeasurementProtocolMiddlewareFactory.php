@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace AdvancedIdeasMechanics\MezzioGaMeasurementProtocol\Middleware;
 
 use Psr\Container\ContainerInterface;
+
 class GoogleAnalyticsMeasurementProtocolMiddlewareFactory
 {
     public function __invoke(ContainerInterface $container): GoogleAnalyticsMeasurementProtocolMiddleware

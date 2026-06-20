@@ -43,30 +43,60 @@ class GoogleAnalyticsMeasurementProtocolMiddleware implements MiddlewareInterfac
             );
         }
 
-        // work disconnected from the browser, requires fpm/Nginx
-        if (function_exists('fastcgi_finish_request')) {
-            while (ob_get_level() > 0) {
-                ob_end_flush();
+        // Emit HTTP Status Code Line
+        header(sprintf(
+            'HTTP/%s %s %s',
+            $response->getProtocolVersion(),
+            $response->getStatusCode(),
+            $response->getReasonPhrase()
+        ), true, $response->getStatusCode());
+
+        // Emit Headers
+        foreach ($response->getHeaders() as $name => $values) {
+            foreach ($values as $value) {
+                header(sprintf('%s: %s', $name, $value), false);
             }
-            fastcgi_finish_request();
         }
 
-        // Run in the background, to not freeze for the client.
+        // Clean out any nested output buffers safely
+        while (ob_get_level() > 0) {
+            ob_end_flush();
+        }
+
+        // Print the final HTML payload to the browser
+        echo $response->getBody()->__toString();
+
+        // Check environment behavior
+        if (function_exists('fastcgi_finish_request')) {
+            // Perfect FPM optimization: kill the connection immediately
+            fastcgi_finish_request();
+        } else {
+            // mod_php (Apache) fallback: force the web server to push out the echo data
+            if (function_exists('apache_setenv')) {
+                @apache_setenv('no-gzip', '1'); // Disable apache compression so it flushes instantly
+            }
+            header('Content-Length: ' . $response->getBody()->getSize());
+            header('Connection: close');
+            flush();
+        }
+
+        // 5. BACKGROUND WORK: Trigger GA4 over the network
         try {
             $analytics = Analytics::new($this->measurementId, $this->apiSecret, $this->debug);
 
             $pageView = PageView::new()
                 ->setPageLocation((string) $request->getUri())
-                ->setPageTitle($this->pageTitle .': ' . $request->getUri()->getHost());
+                ->setPageTitle($this->pageTitle . ': ' . $request->getUri()->getHost());
 
             $analytics->setClientId($clientId)
                 ->addEvent($pageView)
                 ->post();
-
         } catch (\Throwable $e) {
-
+            // Fail silently. The user already has their page, so network drops won't break things.
         }
 
-        return $response;
+        // 6. Return a blank placeholder response.
+        // Because we shortcutted emission, Mezzio's outer runner won't conflict.
+        return new Response();
     }
 }
